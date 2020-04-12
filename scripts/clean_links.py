@@ -16,10 +16,6 @@ def extract_links(row):
 		response = requests.head(url, allow_redirects=True)
 		size = response.headers.get('content-length', 0)				# .get gives us a dictionary item if the key exists
 		size = float(int(size)/MBFACTOR)
-
-		# global SUM
-		# SUM += size
-		# print('{:.2f}'.format(SUM))
 	return size
 
 def parallelize_dataframe(df, func):

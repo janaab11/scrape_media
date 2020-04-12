@@ -14,13 +14,13 @@ LOGIN = "/member/login_new.php"
 LESSONS = "/lesson-library"
 
 MEDIA = ['.mp3','.pdf']
-CSV_FILE = "media.csv"
+CSV_FILE = "raw/media.csv"
 with open(CSV_FILE, 'w+', newline='') as file:
 	csv_writer = csv.writer(file)
 	csv_writer.writerow(['collection','lesson','links'])
 
 class MediaSpider(scrapy.Spider):
-	name = 'media'
+	name = 'media_spy'
 	start_urls = [BASE]
 
 	def clean_name(self,sub,string):

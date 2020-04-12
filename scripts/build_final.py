@@ -8,5 +8,5 @@ if __name__ == '__main__':
 	data = pd.read_csv(CSV_FILE)
 	url = f'{NAME}_url'
 	columns = ['collection','lesson',url]
-	filename = CSV_FILE.split('.')[0]
-	data[columns].to_csv(f'{filename}_{NAME}.csv', index=False)
+	filename, ext = CSV_FILE.rsplit('.',1)
+	data[columns].to_csv(f'{filename}_{NAME}.{ext}', index=False)

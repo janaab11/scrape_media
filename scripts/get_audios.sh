@@ -3,9 +3,8 @@
 
 # Default values of arguments
 NAME=lesson
-CSV=media_lesson.csv
+CSV=raw/media_lesson.csv
 DATA_DIR=data
-NUMBER=25
 
 # Loop through arguments and process them
 for arg in "$@"

@@ -34,14 +34,14 @@ done
 set -x
 
 download() {
-    mkdir -p ${1}/${2}/${3}
-    wget ${4} -O ${1}/${2}/${3}/${5}.mp3 
+    mkdir -p ${1}/${2}
+    wget ${3} -O ${1}/${2}/${4}.mp3 
 #    curl "$(echo $2 | xargs)" | ffmpeg -i - $3/$1.wav #as we are processing it by librosa which automatically coverts it to mono and sampling rate can be handled there as well removing -ac 1  -ar 8000
 }
 
 export -f download
 mkdir -p ${DATA_DIR}
-cat ${CSV} | parallel --bar --colsep ',' download ${DATA_DIR} {1} {2} {3} ${NAME}
+cat ${CSV} | parallel --bar --colsep ',' download ${DATA_DIR} {1}/{2} {3} ${NAME}
 
 #jq -c '.[]' $1 | while read -r line; do
 #    read -r f1 f2 f3 f4 f5 <<< $(jq -c '.[]' <<< $line)

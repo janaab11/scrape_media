@@ -4,3 +4,4 @@ Scrapy==2.0.1
 tqdm==4.40.2
 requests==2.22.0
 multiprocessing
+docopt

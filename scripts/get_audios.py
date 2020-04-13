@@ -42,16 +42,17 @@ def apply_get(df):
 
 def get_file(row):
     val=-1
-    check_path(row['folder'].rsplit('/',1)[0])
-    file = '{}.{}'.format(row['folder'],row['url'].rsplit('.',1)[-1])
-    
-    if not os.path.exists(file) and row['url']!=str(-1):
-        try:
-            r = requests.get(row['url'], allow_redirects=True)
-            open(file,'wb').write(r.content)
-            val=1
-        except (KeyboardInterrupt, SystemExit):
-            raise
+    if str(row['url'])!=str(-1):
+        check_path(row['folder'].rsplit('/',1)[0])
+        file = '{}.{}'.format(row['folder'],row['url'].rsplit('.',1)[-1])
+        
+        if not os.path.exists(file):
+            try:
+                r = requests.get(row['url'], allow_redirects=True)
+                open(file,'wb').write(r.content)
+                val=1
+            except (KeyboardInterrupt, SystemExit):
+                raise
     return val
 
 if __name__ == '__main__':

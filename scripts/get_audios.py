@@ -17,6 +17,7 @@ import multiprocessing
 
 num_cores = multiprocessing.cpu_count() #number of cores on your machine
 num_partitions = 10 #number of partitions to split dataframe
+UNK = -1
 
 def check_path(folder, debug=False):
     '''
@@ -42,21 +43,16 @@ def apply_get(df):
 
 def get_file(row):
     val=-1
-    if str(row['url'])!=str(-1):
-        try:
-            check_path(row['folder'].rsplit('/',1)[0])
-            file = '{}.{}'.format(row['folder'],row['url'].rsplit('.',1)[-1])
-            if not os.path.exists(file):
-                try:
-                    r = requests.get(row['url'], allow_redirects=True)
-                    open(file,'wb').write(r.content)
-                    val=1
-                except (KeyboardInterrupt, SystemExit):
-                    raise
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except:
-            print(row['url'])
+    if str(row['url'])!=str(UNK):
+        check_path(row['folder'].rsplit('/',1)[0])
+        file = '{}.{}'.format(row['folder'],row['url'].rsplit('.',1)[-1])
+        if not os.path.exists(file):
+            try:
+                r = requests.get(row['url'], allow_redirects=True)
+                open(file,'wb').write(r.content)
+                val=1
+            except (KeyboardInterrupt, SystemExit):
+                raise
     return val
 
 if __name__ == '__main__':
@@ -70,6 +66,7 @@ if __name__ == '__main__':
     data = pd.read_csv(CSV)
     data['folder'] = data.apply(lambda row: '{}/{}/{}/{}'.format(DATA_DIR,row['collection'],row['lesson'],NAME),axis=1)
     data['url'] = data['{}_url'.format(NAME)]
+    data.fillna(UNK, inplace=True)
     check_path(DATA_DIR)
 
     tqdm.pandas()

@@ -4,6 +4,7 @@
 
 # local files
 data/
+raw/
 
 ### OSX ###
 .idea/*

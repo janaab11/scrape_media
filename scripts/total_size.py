@@ -50,3 +50,4 @@ if __name__ == '__main__':
 			data[col.split('_')[0]+'_size'] = parallelize_dataframe(data[col],apply_size)
 
 	data.to_csv(CSV_FILE,index=False)
+	print(f'Saved back to {CSV_FILE}')

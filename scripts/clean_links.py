@@ -65,3 +65,4 @@ if __name__ == '__main__':
 	data = parallelize_dataframe(data, apply_extract)
 
 	data.to_csv(CSV_FILE,index=False)
+	print(f'Saved back to {CSV_FILE}')

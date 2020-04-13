@@ -10,3 +10,5 @@ if __name__ == '__main__':
 	columns = ['collection','lesson',url]
 	filename, ext = CSV_FILE.rsplit('.',1)
 	data[columns].to_csv(f'{filename}_{NAME}.{ext}', index=False)
+
+	print(f'Saved to {filename}_{NAME}.{ext}')

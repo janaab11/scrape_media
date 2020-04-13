@@ -1,6 +1,14 @@
+import os
 import scrapy
 import csv
 import time
+
+def check_path(folder, debug=True):
+    if not os.path.exists(folder):
+        if debug:
+            print('{} does not exist, creating'.format(folder))
+        os.makedirs(folder)
+    return
 
 BASE = "https://www.vietnamesepod101.com"
 USERNAME = 'manas.viet2@gmail.com'
@@ -13,6 +21,7 @@ PASSWORD = 'barca12345'
 LOGIN = "/member/login_new.php"
 LESSONS = "/lesson-library"
 
+check_path('raw')
 MEDIA = ['.mp3','.pdf']
 CSV_FILE = "raw/media.csv"
 with open(CSV_FILE, 'w+', newline='') as file:

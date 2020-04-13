@@ -10,13 +10,13 @@ def check_path(folder, debug=True):
         os.makedirs(folder)
     return
 
-BASE = "https://www.vietnamesepod101.com"
-USERNAME = 'manas.viet2@gmail.com'
-PASSWORD = 'barca12345'
+# BASE = "https://www.vietnamesepod101.com"
+# USERNAME = 'manas.viet2@gmail.com'
+# PASSWORD = 'barca12345'
 
-# BASE = "https://www.urdupod101.com"
-# USERNAME = 'kksr.urdu@gmail.com'
-# PASSWORD = 'saranam910'
+BASE = "https://www.urdupod101.com"
+USERNAME = 'kksr.urdu@gmail.com'
+PASSWORD = 'saranam910'
 
 LOGIN = "/member/login_new.php"
 LESSONS = "/lesson-library"

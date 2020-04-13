@@ -31,26 +31,28 @@ def check_path(folder, debug=False):
 def parallelize_dataframe(df, func):
     df_split = np.array_split(df, num_partitions)
     pool = multiprocessing.Pool(num_cores)
-    pool.map(func, df_split)
+    df = pd.concat(pool.map(func, df_split))
     pool.close()
     pool.join()
-    return
+    return df
 
 def apply_get(df):
-    tqdm.pandas()
-    df.progress_apply(lambda row: get_file(row), axis=1)
-    return
+    return df.progress_apply(lambda row: get_file(row), axis=1)
+    
 
 def get_file(row):
-    check_path(row['folder'])
-    file = '{}/{}.{}'.format(row['folder'],row['url'].rsplit('/',1)[-1].split('_')[0],row['url'].rsplit('.',1)[-1])
-    if not os.path.exists(file):
+    val=-1
+    check_path(row['folder'].rsplit('/',1)[0])
+    file = '{}.{}'.format(row['folder'],row['url'].rsplit('.',1)[-1])
+    
+    if not os.path.exists(file) and row['url']!=str(-1):
         try:
             r = requests.get(row['url'], allow_redirects=True)
             open(file,'wb').write(r.content)
+            val=1
         except (KeyboardInterrupt, SystemExit):
             raise
-    return
+    return val
 
 if __name__ == '__main__':
 
@@ -61,9 +63,10 @@ if __name__ == '__main__':
     DATA_DIR = args['-d']
 
     data = pd.read_csv(CSV)
-    data['folder'] = data.apply(lambda row: '{}/{}/{}'.format(DATA_DIR,row['collection'],row['lesson']),axis=1)
+    data['folder'] = data.apply(lambda row: '{}/{}/{}/{}'.format(DATA_DIR,row['collection'],row['lesson'],NAME),axis=1)
     data['url'] = data['{}_url'.format(NAME)]
     check_path(DATA_DIR)
-    
-    parallelize_dataframe(data, apply_get)
+
+    tqdm.pandas()
+    temp = parallelize_dataframe(data, apply_get)
     # print(len(temp[temp==1]),' files downloaded!')

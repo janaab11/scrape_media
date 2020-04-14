@@ -49,7 +49,7 @@ do
 	# build csv for download
 	python3 scripts/build_final.py raw/media.csv ${name}
 
-	if [$ALL -eq 1]
+	if [ "$ALL" -eq "1" ]
 	then
 		cat raw/media_${name}.csv > raw/temp.csv
 	else

@@ -1,30 +1,9 @@
 import sys
-import requests
-import numpy as np
 import pandas as pd
-import multiprocessing
+from supports import parallelize_dataframe
 
-num_cores = multiprocessing.cpu_count() #number of cores on your machine
-num_partitions = 10 #number of partitions to split dataframe
-
-def extract_links(row):
-	try:
-		url = int(url)
-		if url==-1:
-			size = 0
-	except:
-		response = requests.head(url, allow_redirects=True)
-		size = response.headers.get('content-length', 0)				# .get gives us a dictionary item if the key exists
-		size = float(int(size)/MBFACTOR)
-	return size
-
-def parallelize_dataframe(df, func):
-    df_split = np.array_split(df, num_partitions)
-    pool = multiprocessing.Pool(num_cores)
-    df = pd.concat(pool.map(func, df_split))
-    pool.close()
-    pool.join()
-    return df
+def apply_extract(df):
+	return df.apply(lambda row: extract_links(row), axis=1)
 
 def extract_links(row):
 	for link in row['links']:
@@ -41,15 +20,13 @@ def extract_links(row):
 				row['lesson_url']=link
 	return row
 
-def apply_extract(df):
-	return df.apply(lambda row: extract_links(row), axis=1)
+def apply_clean(df):
+	return df.apply(lambda links: clean_links(links))
 
 def clean_links(links):
 	return [link[2:-1] for link in links[:-1].split(',')]
 
-def apply_clean(df):
-	return df.apply(lambda links: clean_links(links))
-
+	
 if __name__ == '__main__':
 	CSV_FILE = sys.argv[1]
 

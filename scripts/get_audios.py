@@ -10,39 +10,17 @@
 import os
 import requests
 import pandas as pd
-import numpy as np
 from tqdm import tqdm
 from docopt import docopt
-import multiprocessing
+from supports import check_path, parallelize_dataframe
 
-num_cores = multiprocessing.cpu_count() #number of cores on your machine
-num_partitions = 10 #number of partitions to split dataframe
 UNK = -1
-
-def check_path(folder, debug=False):
-    '''
-    Checks if folder exists. If not, a folder is created
-    '''
-    if not os.path.exists(folder):
-        if debug:
-            print('{} does not exist, creating'.format(folder))
-        os.makedirs(folder)
-    return
-
-def parallelize_dataframe(df, func):
-    df_split = np.array_split(df, num_partitions)
-    pool = multiprocessing.Pool(num_cores)
-    df = pd.concat(pool.map(func, df_split))
-    pool.close()
-    pool.join()
-    return df
 
 def apply_get(df):
     return df.progress_apply(lambda row: get_file(row), axis=1)
-    
 
 def get_file(row):
-    val=-1
+    val=UNK
     if str(row['url'])!=str(UNK):
         check_path(row['folder'].rsplit('/',1)[0])
         file = '{}.{}'.format(row['folder'],row['url'].rsplit('.',1)[-1])
@@ -71,4 +49,4 @@ if __name__ == '__main__':
 
     tqdm.pandas()
     temp = parallelize_dataframe(data, apply_get)
-    # print(len(temp[temp==1]),' files downloaded!')
+    print('{} files downloaded!'.format(len(temp[temp!=UNK])))

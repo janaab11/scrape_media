@@ -44,7 +44,7 @@ python3 scripts/clean_links.py raw/media.csv
 # # calculate link url sizes
 # python3 scripts/total_size.py raw/media.csv
 
-for name in lesson review dialog notes
+for name in lesson review dialog
 do
 	# build csv for download
 	python3 scripts/build_final.py raw/media.csv ${name}

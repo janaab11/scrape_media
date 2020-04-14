@@ -6,18 +6,14 @@ def apply_extract(df):
 	return df.apply(lambda row: extract_links(row), axis=1)
 
 def extract_links(row):
-	for link in row['links']:
-		ext = link.rsplit('.',1)[-1]
-		if ext=='pdf':
-			row['notes_url']=link
+	for link in row['arr_links']:
+		suffix = link.rsplit('.',1)[0].rsplit('_',1)[-1]
+		if suffix=='review':
+			row[f'{suffix}_url']=link
+		elif suffix=='dialog':
+			row[f'{suffix}_url']=link
 		else:
-			suffix = link.rsplit('.',1)[0].rsplit('_',1)[-1]
-			if suffix=='review':
-				row[f'{suffix}_url']=link
-			elif suffix=='dialog':
-				row[f'{suffix}_url']=link
-			else:
-				row['lesson_url']=link
+			row['lesson_url']=link
 	return row
 
 def apply_clean(df):
@@ -35,9 +31,9 @@ if __name__ == '__main__':
 	data.dropna(inplace=True)
 
 	# preprocess links
-	data['links'] = parallelize_dataframe(data['links'], apply_clean)
+	data['arr_links'] = parallelize_dataframe(data['links'], apply_clean)
 	# process links
-	for new_col in ['lesson_url','review_url','dialog_url','notes_url']:
+	for new_col in ['lesson_url','review_url','dialog_url']:
 		data[new_col] = ''
 	data = parallelize_dataframe(data, apply_extract)
 

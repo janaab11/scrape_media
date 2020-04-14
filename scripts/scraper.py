@@ -13,7 +13,7 @@ PASSWORD = 'saranam910'
 
 LOGIN = "/member/login_new.php"
 LESSONS = "/lesson-library"
-MEDIA = ['.mp3','.pdf']
+MEDIA = ['.mp3']
 
 check_path('raw')
 CSV_FILE = "raw/media.csv"
